@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.net.URI;
 import java.util.logging.Logger;
 
 import algorithm.AESAlgorithm;
@@ -98,9 +99,13 @@ public class EncryptImage extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Log.i("Check Dalgo","Decrypt Pwd: " + decryptPwd);*/
-
+                URI uri = (URI) getIntent().getExtras().get(LockImages.ADDING_IMAGE);
+                try {
+                    AESAlgorithm.encryptWithImage("KrajokKai",uri.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Log.d("TestRealPath","Environment.getExternalStorageDirectory().getAbsolutePath(): "+ Environment.getExternalStorageDirectory().getAbsolutePath());
-                Log.d("TestRealPath","Environment.getExternalStorageDirectory().getAbsolutePath(): "+ Environment.);
             }
         };
 

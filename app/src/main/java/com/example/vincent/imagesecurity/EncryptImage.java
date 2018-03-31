@@ -28,7 +28,7 @@ public class EncryptImage extends AppCompatActivity {
     private Button btnDecrypted;
 
     private String encryptPwd;
-
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class EncryptImage extends AppCompatActivity {
     }
 
     private void initImage() {
-        Uri uri = getIntent().getExtras().getParcelable(LockImages.ADDING_IMAGE);
+        uri = getIntent().getExtras().getParcelable(LockImages.ADDING_IMAGE);
 
         ContentResolver cr = getContentResolver();
 
@@ -99,9 +99,11 @@ public class EncryptImage extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Log.i("Check Dalgo","Decrypt Pwd: " + decryptPwd);*/
-                URI uri = (URI) getIntent().getExtras().get(LockImages.ADDING_IMAGE);
+               // String imgagUri = getIntent().getExtras().getParcelable(LockImages.ADDING_IMAGE);
+                String filePath = getIntent().getExtras().getString(LockImages.FILE_PATH);
+                Log.d("EcyptImage","filePath: "+filePath);
                 try {
-                    AESAlgorithm.encryptWithImage("KrajokKai",uri.toString());
+                    AESAlgorithm.encryptWithImage("KrajokKai",filePath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

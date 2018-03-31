@@ -3,11 +3,14 @@ package algorithm;
 import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.security.Key;
 
 import javax.crypto.Cipher;
@@ -41,8 +44,11 @@ public class AESAlgorithm {
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
         File file = new File(uri);
+        Log.d("AESAlgorithm", "file: "+file);
+        Log.d("AESAlgorithm", "file Name: "+file.getName());
+        Log.d("AESAlgorithm", "path: "+Environment.getExternalStorageDirectory().getAbsolutePath());
         FileInputStream fis = new FileInputStream(file);
-        FileOutputStream fos = new FileOutputStream("name+format"+".mcl");
+        FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/name+format"+".mcl");
         CipherInputStream cis = new CipherInputStream(fis,c);
         byte[] encVal = c.doFinal(password.getBytes());
         int i = cis.read(encVal);

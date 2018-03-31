@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LockImages extends AppCompatActivity {
+    public static String FILE_PATH = "FILE_PATH";
     public static String ADDING_IMAGE = "ADDING_IMAGE";
     public static String FILE_NAME = "FILE_NAME";
     public static String FILE_FORMAT = "FILE_FORMAT";
@@ -85,6 +86,7 @@ public class LockImages extends AppCompatActivity {
                 String nameTemp = uriSplit[uriSplit.length-1];
                 String nameFormat[] = nameTemp.split("\\.");
                 Intent intent = new Intent(LockImages.this,EncryptImage.class);
+                intent.putExtra(FILE_PATH,filePath);
                 intent.putExtra(ADDING_IMAGE,imageUri);
                 intent.putExtra(FILE_NAME,nameFormat[0]);
                 intent.putExtra(FILE_FORMAT,nameFormat[1]);

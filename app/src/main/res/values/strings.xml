@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">ImageSecurity</string>
+    <string name="lock_photos">Encrypted Image</string>
+    <string name="unlock_photos">Decrypted Image</string>
+    <string name="photos_security">Image Security</string>
+    <string name="key_password">Key Password</string>
+    <string name="password_require">Password Require</string>
+    <string name="photo_one">Photo 1</string>
+    <string name="photo_two">photo 2</string>
+    <string name="photo_three">photo 3</string>
+    <string name="photo_four">photo 4</string>
+    <string name="photo_five">photo 5</string>
+    <string name="select_photos">Select Image!</string>
+    <string name="select_the_photo">Select Image</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="save_photo">Save</string>
+    <string name="lock_this_photo">Encrypted This Image!</string>
+    <string name="lockPhotos">Encrypted Image</string>
+    <string name="add_photos">Add Image!</string>
+    <string name="camera">Camera !</string>
+    <string name="unlock">Decrypted!</string>
+    <string name="decrypted_image">Decrypted Image</string>
+    <string name="encrypted_image">Encrypted Image</string>
+    <string name="images_security">Images Security</string>
+    <string name="decrypted_test">Decrypted Test</string>
+    <string name="output_password">Output Password</string>
+    <string name="output_name">Output Name</string>
+</resources>
+

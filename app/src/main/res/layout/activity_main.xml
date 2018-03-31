@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="50sp"
+    android:paddingLeft="30sp"
+    android:paddingRight="30sp"
+    android:paddingTop="50sp"
+    android:background="@drawable/maxresdefault" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/images_security"
+        android:textSize="50sp"
+        android:layout_gravity="center"
+        android:background="@drawable/my_border"
+        android:textColor="#ffffff"/>
+
+    <Button
+        android:id="@+id/btnLock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50sp"
+        android:layout_marginTop="50sp"
+        android:text="@string/encrypted_image"
+        android:background="#c7fff700"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnUnlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#c7fff700"
+        android:text="@string/decrypted_image"
+        android:textSize="30sp" />
+
+</LinearLayout>

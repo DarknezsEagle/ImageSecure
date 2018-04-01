@@ -62,12 +62,4 @@
         android:text="@string/save_photo"
         android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/btnDecrypted"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#c7fff700"
-        android:text="@string/decrypted_test"
-        android:textSize="30sp" />
-
 </LinearLayout>

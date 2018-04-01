@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,10 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.net.URI;
-import java.util.logging.Logger;
 
 import algorithm.AESAlgorithm;
 
@@ -51,8 +46,6 @@ public class EncryptImage extends AppCompatActivity {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
             ivPhoto.setImageBitmap(bitmap);
-            Toast.makeText(getApplicationContext()
-                    , uri.getPath(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,50 +57,25 @@ public class EncryptImage extends AppCompatActivity {
         edtNamePhoto.setText(getIntent().getExtras().get(LockImages.FILE_NAME).toString());
         edtPwdPhoto = findViewById(R.id.edtPasswordPhoto);
         btnSave = findViewById(R.id.btnSave);
-        btnDecrypted = findViewById(R.id.btnDecrypted);
-
         btnSave.setOnClickListener(btnSaveOnClickListener);
-        btnDecrypted.setOnClickListener(btnDecryptedOnClickListener);
-
     }
 
         View.OnClickListener btnSaveOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = edtNamePhoto.getText().toString();
+                String filePath = getIntent().getExtras().getString(LockImages.FILE_PATH);
+                String fileName = edtNamePhoto.getText().toString()+"."+getIntent().getExtras().getString(LockImages.FILE_FORMAT);
                 String password = edtPwdPhoto.getText().toString();
-                Log.wtf("Click Save","Name: " + name);
-                Log.wtf("Click Save","DecryptImage: " + password);
-
+                Log.d("Encrypt", "filePath: " + filePath);
+                Log.d("Encrypt", "fileName: " + fileName);
+                Log.d("Encrypt", "password: " + password);
                 try {
-                    encryptPwd = AESAlgorithm.encrypt(edtPwdPhoto.getText().toString());
+                    AESAlgorithm.encryptWithImage(password,filePath, fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Log.wtf("Check Algo","Encrypt Pwd: "+ encryptPwd);
-                
-            }
-        };
-        View.OnClickListener btnDecryptedOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-/*
-                String decryptPwd = null;
-                try {
-                    decryptPwd = AESAlgorithm.decrypt(encryptPwd);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.i("Check Dalgo","Decrypt Pwd: " + decryptPwd);*/
-               // String imgagUri = getIntent().getExtras().getParcelable(LockImages.ADDING_IMAGE);
-                String filePath = getIntent().getExtras().getString(LockImages.FILE_PATH);
-                Log.d("EcyptImage","filePath: "+filePath);
-                try {
-                    AESAlgorithm.encryptWithImage("KrajokKai",filePath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("TestRealPath","Environment.getExternalStorageDirectory().getAbsolutePath(): "+ Environment.getExternalStorageDirectory().getAbsolutePath());
+                finish();
             }
         };
 

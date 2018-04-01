@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class UnlockImages extends AppCompatActivity {
     private Button photoSelect;
-    private static final int REQUEST_GALLERY = 1;
+    private static final int REQUEST_FILE_SELECT = 3;
 
 
     @Override
@@ -23,7 +23,7 @@ public class UnlockImages extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_FILE_SELECT && resultCode == RESULT_OK){
             Intent intent = new Intent(UnlockImages.this,DecryptImage.class);
             startActivity(intent);
 
@@ -35,9 +35,9 @@ public class UnlockImages extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
+                intent.setType("*/*");
                 startActivityForResult(Intent.createChooser(intent
-                        , "Select photo from"), REQUEST_GALLERY);
+                        , "Select file from"), REQUEST_FILE_SELECT);
             }
         };
 }

@@ -1,7 +1,6 @@
 package algorithm;
 
 import android.annotation.TargetApi;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
@@ -10,7 +9,6 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.security.Key;
 
 import javax.crypto.Cipher;
@@ -18,7 +16,7 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESAlgorithm {
-
+    private static final String FORMAT_ENCRYPTION = ".mcl";
     private static final String ALGO = "AES";
     private static final byte[] keyValue =
             new byte[]{'T', 'h', 'e', 'B', 'e', 's', 't', 'S', 'e', 'c', 'r', 'e', 't', 'K', 'e', 'y'};
@@ -39,7 +37,7 @@ public class AESAlgorithm {
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-        public static String encryptWithImage(String password, String uri) throws Exception {
+        public static String encryptWithImage(String password, String uri, String fileName) throws Exception {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
@@ -48,7 +46,7 @@ public class AESAlgorithm {
         Log.d("AESAlgorithm", "file Name: "+file.getName());
         Log.d("AESAlgorithm", "path: "+Environment.getExternalStorageDirectory().getAbsolutePath());
         FileInputStream fis = new FileInputStream(file);
-        FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/name+format"+".mcl");
+        FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/"+fileName+FORMAT_ENCRYPTION);
         CipherInputStream cis = new CipherInputStream(fis,c);
         byte[] encVal = c.doFinal(password.getBytes());
         int i = cis.read(encVal);

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +19,6 @@ public class EncryptImage extends AppCompatActivity {
     private EditText edtPwdPhoto;
     private EditText edtNamePhoto;
     private Button btnSave;
-    private Button btnDecrypted;
-
-    private String encryptPwd;
     private Uri uri;
 
     @Override
@@ -66,9 +62,6 @@ public class EncryptImage extends AppCompatActivity {
                 String filePath = getIntent().getExtras().getString(LockImages.FILE_PATH);
                 String fileName = edtNamePhoto.getText().toString()+"."+getIntent().getExtras().getString(LockImages.FILE_FORMAT);
                 String password = edtPwdPhoto.getText().toString();
-                Log.d("Encrypt", "filePath: " + filePath);
-                Log.d("Encrypt", "fileName: " + fileName);
-                Log.d("Encrypt", "password: " + password);
                 try {
                     AESAlgorithm.encryptWithImage(password,filePath, fileName);
                 } catch (Exception e) {

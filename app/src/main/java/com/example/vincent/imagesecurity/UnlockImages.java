@@ -1,14 +1,20 @@
 package com.example.vincent.imagesecurity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import utils.RealPathUtil;
+
 public class UnlockImages extends AppCompatActivity {
     private Button photoSelect;
     private static final int REQUEST_FILE_SELECT = 3;
+    public static String FILE_NAME = "FILE_NAME";
+    public static String FILE_FORMAT = "FILE_FORMAT";
+    public static String DECRYPTED_IMAGE = "DECRYPTED_IMAGE";
 
 
     @Override
@@ -24,7 +30,15 @@ public class UnlockImages extends AppCompatActivity {
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_FILE_SELECT && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            String filePath = RealPathUtil.getRealPath(UnlockImages.this, uri);
+            String uriSplit[] = filePath.split("/");
+            String nameTemp = uriSplit[uriSplit.length-1];
+            String nameFormat[] = nameTemp.split("\\.");
             Intent intent = new Intent(UnlockImages.this,DecryptImage.class);
+            intent.putExtra(DECRYPTED_IMAGE,uri);
+            intent.putExtra(FILE_NAME,nameFormat[0]);
+            intent.putExtra(FILE_FORMAT,nameFormat[1]);
             startActivity(intent);
 
         }

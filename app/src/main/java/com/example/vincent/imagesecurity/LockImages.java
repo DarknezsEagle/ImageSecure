@@ -53,13 +53,11 @@ public class LockImages extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("LockImages","In REQUEST_CAMERA");
 
         if (requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
-        Log.i("LockImages","In Request Camera");
-        Log.i("LockImages","data.getdata: "+data.getData());
+        Log.i("LockImages","In REQUEST_CAMERA");
             Uri uri = data.getData();
-            String filePath = getRealPathFromURI(uri);
+            String filePath = RealPathUtil.getRealPath(LockImages.this, uri);
             String uriSplit[] = filePath.split("/");
             String nameTemp = uriSplit[uriSplit.length-1];
             String nameFormat[] = nameTemp.split("\\.");
@@ -72,9 +70,7 @@ public class LockImages extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_GALLERY) {
             Log.i("LockImages","In REQUEST_GALLERY");
-            Log.d("LockImages","data.getClipData: "+data.getClipData());
             if(data.getClipData() != null) {
-                Log.d("LockImages", "If case-Gallery");
                 int count = data.getClipData().getItemCount();
                 int currentItem = 0;
                 while(currentItem < count) {
@@ -84,18 +80,11 @@ public class LockImages extends AppCompatActivity {
 //                    currentItem = currentItem + 1;
                 }
             } else if(data.getData() != null) {
-                Log.d("LockImages", "Else case-Gallery");
                 Uri imageUri = data.getData();
-                Log.i("LockImages","data.getdata: "+ data.getData());
-                Log.d("LockImages","Absolute URI: "+ getAbsolutePath(imageUri));
                 String filePath = RealPathUtil.getRealPath(LockImages.this, imageUri);
-                Log.d("LockImages","FilePath: "+filePath);
                 String uriSplit[] = filePath.split("/");
                 String nameTemp = uriSplit[uriSplit.length-1];
                 String nameFormat[] = nameTemp.split("\\.");
-                Log.d("LockImages","FilePath: "+ uriSplit[uriSplit.length-1]);
-                Log.d("LockImages","Name Temp: "+ nameTemp);
-                Log.d("LockImages","Name Format: "+ TextUtils.join(",",nameFormat));
                 Intent intent = new Intent(LockImages.this,EncryptImage.class);
                 intent.putExtra(FILE_PATH,filePath);
                 intent.putExtra(ADDING_IMAGE,imageUri);
@@ -109,64 +98,7 @@ public class LockImages extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(19)
-    public String getAbsolutePath(Uri uri) {
-        String wholeID = DocumentsContract.getDocumentId(uri);
-        Log.d("LockImages", "In case getAbsoluteURI");
-        Log.d("LockImages", "URI: "+ uri);
-        // Split at colon, use second item in the array
-        String id = wholeID.split(":")[1];
-        Log.d("LockImages", "Id: "+ id);
 
-        String[] column = { MediaStore.Images.Media.DATA };
-        Log.d("LockImages", "Column Arrays: "+ Arrays.asList(column));
-        // where id is equal to
-        String sel = MediaStore.Images.Media._ID + "=?";
-        Log.d("LockImages", "Sel: "+ sel);
-        Cursor cursor = getContentResolver().
-                query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        column, sel, new String[]{ id }, null);
-        Log.d("LockImages", "cursor: "+ cursor);
-        String filePath = "";
-
-        int columnIndex = cursor.getColumnIndex(column[0]);
-        Log.d("LockImages", "columnIndex: "+ columnIndex);
-        if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex);
-        }
-
-        cursor.close();
-        return  filePath;
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-
-        // can post image
-        String [] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery( contentUri,
-                proj, // Which columns to return
-                null, // WHERE clause; which rows to return (all rows)
-                null, // WHERE clause selection arguments (none)
-                null); // Order-by clause (ascending by name)
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-    }
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
     View.OnClickListener useCameraOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

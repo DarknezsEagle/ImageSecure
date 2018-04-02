@@ -12,6 +12,7 @@ import utils.RealPathUtil;
 public class UnlockImages extends AppCompatActivity {
     private Button photoSelect;
     private static final int REQUEST_FILE_SELECT = 3;
+    public static String FILE_PATH = "FILE_PATH";
     public static String FILE_NAME = "FILE_NAME";
     public static String FILE_FORMAT = "FILE_FORMAT";
     public static String DECRYPTED_IMAGE = "DECRYPTED_IMAGE";
@@ -37,9 +38,11 @@ public class UnlockImages extends AppCompatActivity {
             String nameFormat[] = nameTemp.split("\\.");
             Intent intent = new Intent(UnlockImages.this,DecryptImage.class);
             intent.putExtra(DECRYPTED_IMAGE,uri);
+            intent.putExtra(FILE_PATH,filePath);
             intent.putExtra(FILE_NAME,nameFormat[0]);
             intent.putExtra(FILE_FORMAT,nameFormat[1]);
             startActivity(intent);
+            finish();
 
         }
     }

@@ -26,8 +26,8 @@ import java.util.Date;
 import utils.RealPathUtil;
 
 public class LockImages extends AppCompatActivity {
-    public static String FILE_PATH = "FILE_PATH";
     public static String ADDING_IMAGE = "ADDING_IMAGE";
+    public static String FILE_PATH = "FILE_PATH";
     public static String FILE_NAME = "FILE_NAME";
     public static String FILE_FORMAT = "FILE_FORMAT";
     private static final int REQUEST_CAMERA = 0 ;

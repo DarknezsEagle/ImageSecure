@@ -74,7 +74,6 @@ public class EncryptImage extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Log.wtf("Check Algo","Encrypt Pwd: "+ encryptPwd);
                 finish();
             }
         };

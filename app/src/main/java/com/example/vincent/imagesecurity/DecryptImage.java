@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.net.URI;
+
 import algorithm.AESAlgorithm;
 
 public class DecryptImage extends AppCompatActivity {
@@ -41,13 +43,18 @@ public class DecryptImage extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
+            String filePath = getIntent().getExtras().getString(UnlockImages.FILE_PATH);
+            String fileName = getIntent().getExtras().get(UnlockImages.FILE_NAME)+"."+getIntent().getExtras().getString(UnlockImages.FILE_FORMAT);
             String decryptPwd = edtPassword.getText().toString();
+            Log.d("DecryptImage", "Decrypt Source: " + decryptPwd);
+
+
             try {
-                decryptPwd = AESAlgorithm.decrypt(encryptPwd);
+                ivInvalid.setImageBitmap(AESAlgorithm.decryptWithImage(decryptPwd,filePath,fileName));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.i("DecryptImage", "Decrypt Pwd: " + decryptPwd);
+            Log.d("DecryptImage", "Decrypt Pwd: " + decryptPwd);
 
         }
 

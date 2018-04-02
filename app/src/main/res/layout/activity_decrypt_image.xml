@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50sp"
         android:layout_marginTop="50sp"
-        android:text="@string/password_require"
+        android:hint="@string/password_require"
+        android:textColorHint="#7bffffff"
         android:background="#b5000000"
         android:textColor="#bcffffff"
         android:textSize="30sp" />

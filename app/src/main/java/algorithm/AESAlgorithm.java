@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.Key;
@@ -25,6 +26,8 @@ public class AESAlgorithm {
             new byte[]{'T', 'h', 'e', 'B', 'e', 's', 't', 'S', 'e', 'c', 'r', 'e', 't', 'K', 'e', 'y'};
     private static byte[] weight = {(byte) 0xc7, (byte) 0x73, (byte) 0x21, (byte) 0x8c,
             (byte) 0x7e, (byte) 0xc8, (byte) 0xee, (byte) 0x99};
+    private static final String EXTERNAL_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private static final String DIRECTORY_NAME = "/MCL/";
 
     /**
      * Encrypt a string with AES algorithm.
@@ -45,8 +48,9 @@ public class AESAlgorithm {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
         PBEParameterSpec pbeParamSpec = new PBEParameterSpec(weight, 20);
 
+        createNewDirectory(EXTERNAL_FILE_PATH, DIRECTORY_NAME);
         FileInputStream file = new FileInputStream(uri);
-        FileOutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/" + fileName + FORMAT_ENCRYPTION);
+        FileOutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + DIRECTORY_NAME + fileName + FORMAT_ENCRYPTION);
 
         SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
         Cipher pbeCipher = Cipher.getInstance(AES_ALGORITHM);
@@ -87,8 +91,9 @@ public class AESAlgorithm {
         Cipher c = Cipher.getInstance(AES_ALGORITHM);
         c.init(Cipher.DECRYPT_MODE, pbeKey, pbeParamSpec);
 
+        createNewDirectory(EXTERNAL_FILE_PATH, DIRECTORY_NAME);
         FileInputStream file = new FileInputStream(uri);
-        FileOutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/" + fileName);
+        FileOutputStream output = new FileOutputStream(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
 
         CipherOutputStream cos = new CipherOutputStream(output, c);
         byte[] buf = new byte[1024];
@@ -100,7 +105,7 @@ public class AESAlgorithm {
         output.flush();
         cos.close();
 
-        return BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/" + fileName);
+        return BitmapFactory.decodeFile(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
     }
 
     /**
@@ -108,6 +113,13 @@ public class AESAlgorithm {
      */
     private static Key generateKey() throws Exception {
         return new SecretKeySpec(keyValue, AES);
+    }
+
+    private static void createNewDirectory(String path, String directoryName) {
+        File file = new File(path+directoryName);
+        if (!file.isDirectory()) {
+            file.mkdirs();
+        }
     }
 
 }

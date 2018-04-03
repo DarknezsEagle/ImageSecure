@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import algorithm.AESAlgorithm;
 
 public class DecryptImage extends AppCompatActivity {
     private Button btnDecrypted;
+    private Button btnMainMenu;
+    private TextView tvFileName;
     private EditText edtPassword;
     private ImageView ivInvalid;
 
@@ -28,8 +31,13 @@ public class DecryptImage extends AppCompatActivity {
     private void initInstance() {
         btnDecrypted = findViewById(R.id.btnDecrypted);
         btnDecrypted.setOnClickListener(btnDecryptedOnClickListener);
+        btnMainMenu = findViewById(R.id.btn_continue);
+        btnMainMenu.setOnClickListener(btnContinueOnClickListener);
+        tvFileName = findViewById(R.id.tvFileName);
+        tvFileName.setText(getIntent().getExtras().getString(UnlockImages.FILE_NAME));
         edtPassword = findViewById(R.id.edtPassword);
         ivInvalid = findViewById(R.id.ivInvalid);
+
     }
 
 
@@ -50,6 +58,13 @@ public class DecryptImage extends AppCompatActivity {
             }
         }
 
+    };
+
+    View.OnClickListener btnContinueOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
     };
 }
 

@@ -26,5 +26,7 @@
     <string name="decrypted_test">Decrypted Test</string>
     <string name="output_password">Output Password</string>
     <string name="output_name">Output Name</string>
+    <string name="title_key_password">Name:</string>
+    <string name="btn_main_menu">Main Menu</string>
 </resources>
 

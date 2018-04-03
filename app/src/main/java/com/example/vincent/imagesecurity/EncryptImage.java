@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import algorithm.AESAlgorithm;
+import algorithm.EncryptAndDecryptAlgorithm;
 
 
 public class EncryptImage extends AppCompatActivity {
@@ -63,7 +63,7 @@ public class EncryptImage extends AppCompatActivity {
                 String fileName = edtNamePhoto.getText().toString()+"."+getIntent().getExtras().getString(LockImages.FILE_FORMAT);
                 String password = edtPwdPhoto.getText().toString();
                 try {
-                    AESAlgorithm.encryptWithImage(password,filePath, fileName);
+                    EncryptAndDecryptAlgorithm.encryptWithImageAES(password,filePath, fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

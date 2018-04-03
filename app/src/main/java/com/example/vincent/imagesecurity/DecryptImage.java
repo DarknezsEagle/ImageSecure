@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import algorithm.AESAlgorithm;
+import algorithm.EncryptAndDecryptAlgorithm;
 
 public class DecryptImage extends AppCompatActivity {
     private Button btnDecrypted;
@@ -50,7 +50,7 @@ public class DecryptImage extends AppCompatActivity {
             String decryptPwd = edtPassword.getText().toString();
 
             try {
-                Bitmap bitmap = AESAlgorithm.decryptWithImage(decryptPwd, filePath, fileName);
+                Bitmap bitmap = EncryptAndDecryptAlgorithm.decryptWithImageAES(decryptPwd, filePath, fileName);
                 ivInvalid.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,7 +1,9 @@
 package com.example.vincent.imagesecurity;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Random;
 
 import algorithm.EncryptAndDecryptAlgorithm;
 
@@ -42,6 +46,7 @@ public class DecryptImage extends AppCompatActivity {
 
 
     View.OnClickListener btnDecryptedOnClickListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onClick(View view) {
 
@@ -54,7 +59,14 @@ public class DecryptImage extends AppCompatActivity {
                 ivInvalid.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(DecryptImage.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                Random rn = new Random();
+                int answer = rn.nextInt(8) + 1;
+                String a[] = new String[]{"a","b","c","d","e","f","g","h","i"};
+                String temp = a[answer];
+                int resID = getResources().getIdentifier(temp, "drawable",  getPackageName());
+                ivInvalid.setImageResource(resID);
+
+
             }
         }
 

@@ -5,14 +5,20 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
 import java.security.MessageDigest;
+import java.security.spec.KeySpec;
 import java.util.Arrays;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -121,7 +127,7 @@ public class EncryptAndDecryptAlgorithm {
         FileOutputStream output = new FileOutputStream(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
 
         CipherOutputStream cos = new CipherOutputStream(output, c);
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[4096];
         int read;
         while ((read = file.read(buf)) != -1) {
             cos.write(buf, 0, read);
@@ -146,7 +152,7 @@ public class EncryptAndDecryptAlgorithm {
         Cipher enc = Cipher.getInstance(AES_ALGORITHM);
         enc.init(Cipher.DECRYPT_MODE, secretKeySpec );
         CipherOutputStream cos = new CipherOutputStream(output, enc);
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[4096];
         int read;
         while ((read = file.read(buf)) != -1) {
             cos.write(buf, 0, read);
@@ -154,6 +160,26 @@ public class EncryptAndDecryptAlgorithm {
         file.close();
         output.flush();
         cos.close();
+
+        return BitmapFactory.decodeFile(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
+    }
+
+    public static Bitmap decryptWithImageAESN(String password, String uri, String fileName) throws Exception {
+        byte[] key = (password).getBytes("UTF-8");
+        MessageDigest sha = MessageDigest.getInstance("SHA-1");
+        key = sha.digest(key);
+        key = Arrays.copyOf(key, 16); // use only first 128 bit
+
+        createNewDirectory(EXTERNAL_FILE_PATH, DIRECTORY_NAME);
+        FileInputStream file = new FileInputStream(uri);
+        FileOutputStream output = new FileOutputStream(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, AES_ALGORITHM);
+        Cipher enc = Cipher.getInstance(AES_ALGORITHM);
+        enc.init(Cipher.DECRYPT_MODE, secretKeySpec);
+        byte[] decrypted = enc.doFinal(key);
+        output.write(decrypted);
+        file.close();
+        output.flush();
 
         return BitmapFactory.decodeFile(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
     }
@@ -172,4 +198,82 @@ public class EncryptAndDecryptAlgorithm {
         }
     }
 
+    public static void encryptAES(String password, String uri, String fileName) throws Exception {
+        byte[] temp = (password).getBytes("UTF-8");
+        MessageDigest sha = MessageDigest.getInstance("SHA-1");
+        temp = sha.digest(temp);
+        temp = Arrays.copyOf(temp, 16); // use only first 128 bit
+        SecretKeySpec key  = new SecretKeySpec(temp,AES_ALGORITHM);
+        byte[] content = getFile(uri);
+        Cipher cipher;
+        byte[] encrypted = null;
+        try {
+            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE,  key);
+            encrypted = cipher.doFinal(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        saveFile(encrypted, fileName+FORMAT_ENCRYPTION);
+    }
+    public static void decryptAES(String password, String uri, String fileName) throws Exception {
+        byte[] temp = (password).getBytes("UTF-8");
+        MessageDigest sha = MessageDigest.getInstance("SHA-1");
+        temp = sha.digest(temp);
+        temp = Arrays.copyOf(temp, 16); // use only first 128 bit
+        SecretKeySpec key  = new SecretKeySpec(temp,AES_ALGORITHM);
+        byte[] textCryp  = getFile(uri);
+        Cipher cipher;
+        byte[] decrypted = null;
+        try {
+            cipher = Cipher.getInstance("AES/ECB/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            decrypted = cipher.doFinal(textCryp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        saveFile(decrypted, fileName);
+    }
+
+    public static void saveFile(byte[] bytes,String fileName) throws IOException {
+        createNewDirectory(EXTERNAL_FILE_PATH, DIRECTORY_NAME);
+        FileOutputStream fos = new FileOutputStream(EXTERNAL_FILE_PATH + DIRECTORY_NAME + fileName);
+        fos.write(bytes);
+        fos.close();
+    }
+
+    public static byte[] getFile(String uri) {
+
+
+        File f = new File(uri);
+        InputStream is = null;
+        try {
+            is = new FileInputStream(f);
+        } catch (FileNotFoundException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
+        byte[] content = null;
+        try {
+            content = new byte[is.available()];
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        try {
+            is.read(content);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return content;
+    }
+
+    public static Key keyGen(String k) throws Exception {
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA256");
+        KeySpec spec = new PBEKeySpec(k.toCharArray(), k.getBytes(), 12, 128);
+        SecretKey tmp = factory.generateSecret(spec);
+        return new SecretKeySpec(tmp.getEncoded(), "AES");
+    }
 }
